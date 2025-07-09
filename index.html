@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Digital</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: gradientBG 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6e8efb 0%, #4a6cf7 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .payment-methods {
+            padding: 30px;
+        }
+
+        .method {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid #4a6cf7;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .method:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .method::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(74, 108, 247, 0.05) 0%, transparent 100%);
+            z-index: 0;
+        }
+
+        .method-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .method-title img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+
+        .method-title h2 {
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .method-content {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .input-group:hover {
+            border-color: #4a6cf7;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .input-group button {
+            background: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .input-group button:hover {
+            background: #3a5ce4;
+        }
+
+        .qris-container {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .qris-container:hover {
+            transform: scale(1.02);
+        }
+
+        .qris-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .qris-container img:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .qris-container p {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .copy-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .payment-methods {
+                padding: 20px;
+            }
+            
+            .method {
+                padding: 15px;
+            }
+        }
+
+        /* Animasi tambahan */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .method {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .method:nth-child(1) { animation-delay: 0.1s; }
+        .method:nth-child(2) { animation-delay: 0.2s; }
+        .method:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>PEMBAYARAN DIGITAL</h1>
+        </div>
+        
+        <div class="payment-methods">
+            <div class="method">
+                <div class="method-title">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA">
+                    <h2>Transfer DANA</h2>
+                </div>
+                <div class="method-content">
+                    <div class="input-group">
+                        <input type="text" value="083823370841" id="dana-number" readonly>
+                        <button onclick="copyToClipboard('dana-number')">Salin</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="method">
+                <div class="method-title">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Gopay_logo.svg/1200px-Gopay_logo.svg.png" alt="Gopay">
+                    <h2>Transfer Gopay</h2>
+                </div>
+                <div class="method-content">
+                    <div class="input-group">
+                        <input type="text" value="083823370841" id="gopay-number" readonly>
+                        <button onclick="copyToClipboard('gopay-number')">Salin</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="method">
+                <div class="method-title">
+                    <img src="https://qris.online/wp-content/uploads/2021/09/QRIS-Logo-Vector-01-1.png" alt="QRIS">
+                    <h2>Pembayaran QRIS</h2>
+                </div>
+                <div class="method-content">
+                    <div class="qris-container">
+                        <img src="https://img1.pixhost.to/images/7034/619492756_imgtmp.jpg" alt="QR Code">
+                        <p>Scan QR code di atas untuk melakukan pembayaran</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="copy-notification" id="copyNotification">Nomor berhasil disalin!</div>
+    
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            element.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            
+            // Show notification
+            const notification = document.getElementById("copyNotification");
+            notification.classList.add("show");
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
